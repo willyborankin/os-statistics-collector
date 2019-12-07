@@ -24,7 +24,6 @@ public class StatisticsProducerApplicationLauncher {
             OsStatisticsProvider
                     .from(configuration)
                     .withHealth(applicationHealth)
-                    .onExitShutdown()
                     .scheduleEach(seconds);
         } finally {
             ApplicationHealthMBeanRegistrator.unregister(applicationHealth.getApplicationName());

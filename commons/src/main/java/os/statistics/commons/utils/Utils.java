@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Utils {
 
@@ -30,6 +32,23 @@ public class Utils {
     public static <T> void executeIfNotNull(T objectToCheck, NonNullCallback<T> callback) {
         if (Objects.nonNull(objectToCheck))
             callback.call();
+    }
+
+    public static void shutdownHukFor(ExecutorService executorService) {
+        executeIfNotNull(executorService, () -> {
+            final var shudownHuk = (Runnable) () -> {
+                executorService.shutdown();
+                try {
+                    if (!executorService.awaitTermination(200, TimeUnit.MILLISECONDS)) {
+                        executorService.shutdownNow();
+                    }
+                } catch (InterruptedException ie) {
+                    executorService.shutdownNow();
+                    Thread.currentThread().interrupt();
+                }
+            };
+            Runtime.getRuntime().addShutdownHook(new Thread(shudownHuk));
+        });
     }
 
 }

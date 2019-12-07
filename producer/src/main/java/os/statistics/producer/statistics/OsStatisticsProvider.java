@@ -1,11 +1,6 @@
 package os.statistics.producer.statistics;
 
 import com.typesafe.config.Config;
-import os.statistics.commons.model.Host;
-import os.statistics.commons.utils.Utils;
-import os.statistics.producer.HostFactory;
-import os.statistics.producer.ProducerFactory;
-import os.statistics.producer.health.StatisticsProducerApplicationHealth;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.errors.InvalidTopicException;
@@ -14,6 +9,11 @@ import org.apache.kafka.common.errors.RecordBatchTooLargeException;
 import org.apache.kafka.common.errors.UnknownServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import os.statistics.commons.model.Host;
+import os.statistics.commons.utils.Utils;
+import os.statistics.producer.HostFactory;
+import os.statistics.producer.ProducerFactory;
+import os.statistics.producer.health.StatisticsProducerApplicationHealth;
 
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -57,7 +57,7 @@ public class OsStatisticsProvider {
         if (kafkaTopicName.isBlank() || kafkaTopicName.isEmpty())
             throw new IllegalArgumentException("Kafka topic name has not been set");
         final var host = HostFactory.createHost(configuration);
-        return new OsStatisticsProvider(host, kafkaTopicName, statisticsProducer);
+        return new OsStatisticsProvider(host, kafkaTopicName, statisticsProducer).onExitShutdown();
     }
 
     public void scheduleEach(long seconds) {
@@ -110,21 +110,13 @@ public class OsStatisticsProvider {
 
     public OsStatisticsProvider onExitShutdown() {
         Runtime.getRuntime().addShutdownHook(new Thread(this::shutdown));
+        Utils.shutdownHukFor(scheduledExecutorService);
         return this;
     }
 
     public void shutdown() {
         if (nonNull(statisticsProducer))
             statisticsProducer.close();
-        scheduledExecutorService.shutdown();
-        try {
-            if (!scheduledExecutorService.awaitTermination(200, TimeUnit.MILLISECONDS)) {
-                scheduledExecutorService.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            scheduledExecutorService.shutdownNow();
-            Thread.currentThread().interrupt();
-        }
     }
 
 }
