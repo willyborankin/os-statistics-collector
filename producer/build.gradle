@@ -1,0 +1,12 @@
+apply plugin: 'application'
+
+group 'os.statistics'
+version '0.1'
+
+dependencies {
+    compile project(':commons')
+}
+
+application {
+    mainClassName = 'os.statistics.producer.StatisticsProducerApplicationLauncher'
+}

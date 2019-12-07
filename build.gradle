@@ -1,0 +1,41 @@
+allprojects {
+
+    apply plugin: 'java'
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
+    dependencies {
+        compile 'org.slf4j:slf4j-api:1.7.29'
+        compile 'ch.qos.logback:logback-classic:1.2.3'
+
+        compile 'com.fasterxml.jackson.core:jackson-core:2.10.1'
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.10.1'
+        compile 'com.fasterxml.jackson.core:jackson-annotations:2.10.1'
+
+        compile 'org.apache.kafka:kafka-clients:2.3.1'
+        compile 'com.typesafe:config:1.4.0'
+
+        testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.5.2'
+
+        testCompile 'org.mockito:mockito-core:3.2.0'
+        testCompile 'org.mockito:mockito-junit-jupiter:3.2.0'
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+subprojects {
+    version = "0.1"
+}
+

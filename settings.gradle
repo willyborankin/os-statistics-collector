@@ -1,0 +1,5 @@
+rootProject.name = 'os-statistics-collector'
+
+include 'commons'
+include 'producer'
+include 'consumer'
