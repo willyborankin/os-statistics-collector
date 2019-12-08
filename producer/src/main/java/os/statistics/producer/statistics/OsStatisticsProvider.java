@@ -52,6 +52,7 @@ public class OsStatisticsProvider {
 
     public static OsStatisticsProvider from(Config configuration) {
         requireNonNull(configuration, "Configuration has not been set");
+        LOGGER.info("Create OS statistics provider");
         final var kafkaTopicName = configuration.getString("os.collector.topicname");
         final var statisticsProducer = ProducerFactory.createProducer(configuration);
         if (kafkaTopicName.isBlank() || kafkaTopicName.isEmpty())

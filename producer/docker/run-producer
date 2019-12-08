@@ -1,0 +1,11 @@
+#!/bin/bash -x
+PRODUCER_CONFIG=producer.conf
+echo "os.collector.hostname=${PRODUCER_HOSTNAME}" >> ${PRODUCER_CONFIG}
+echo "os.collector.ipAddress=${PRODUCER_IP_ADDRESS}" >> ${PRODUCER_CONFIG}
+echo "os.collector.topicname=${KAFKA_TOPIC_NAME}" >> ${PRODUCER_CONFIG}
+echo "os.collector.tick.duration=${PRODUCER_TICK_DURATION}" >> ${PRODUCER_CONFIG}
+echo "bootstrap.servers=${KAFKA_BROKERS}" >> ${PRODUCER_CONFIG}
+
+cat ${PRODUCER_CONFIG}
+
+exec /usr/app/producer/bin/producer

@@ -5,6 +5,8 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.UUIDSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import os.statistics.commons.model.Host;
 import os.statistics.model.serialization.HostJsonSerializer;
 import os.statistics.producer.health.StatisticsProducerApplicationHealth;
@@ -13,6 +15,8 @@ import java.util.Properties;
 import java.util.UUID;
 
 public final class ProducerFactory {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ProducerFactory.class);
 
     public static Producer<UUID, Host> createProducer(Config configuration) {
         final var kafkaProperties = new Properties();
@@ -26,7 +30,7 @@ public final class ProducerFactory {
             kafkaProperties.setProperty(ProducerConfig.RETRIES_CONFIG, configuration.getString(ProducerConfig.RETRIES_CONFIG));
         if (configuration.hasPath(ProducerConfig.ACKS_CONFIG))
             kafkaProperties.setProperty(ProducerConfig.ACKS_CONFIG, configuration.getString(ProducerConfig.ACKS_CONFIG));
-
+        LOGGER.info("Create producer with properties: {}", kafkaProperties);
         return new KafkaProducer<>(kafkaProperties, new UUIDSerializer(), new HostJsonSerializer());
     }
 

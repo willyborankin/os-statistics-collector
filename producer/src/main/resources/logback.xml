@@ -31,7 +31,7 @@
     <logger name="org.apache.kafka" level="ERROR" />
     <logger name="org.postgresql" level="ERROR" />
     <logger name="ch.qos.logback" level="INFO" />
-    <logger name="os.statistics.producer" level="ERROR" />
+    <logger name="os.statistics.producer" level="INFO" />
 
 
     <root level="{root.level:-INFO}">
