@@ -30,6 +30,15 @@ public final class ProducerFactory {
             kafkaProperties.setProperty(ProducerConfig.RETRIES_CONFIG, configuration.getString(ProducerConfig.RETRIES_CONFIG));
         if (configuration.hasPath(ProducerConfig.ACKS_CONFIG))
             kafkaProperties.setProperty(ProducerConfig.ACKS_CONFIG, configuration.getString(ProducerConfig.ACKS_CONFIG));
+
+        kafkaProperties.setProperty("security.protocol", configuration.getString("security.protocol"));
+        kafkaProperties.setProperty("ssl.endpoint.identification.algorithm", configuration.getString("ssl.endpoint.identification.algorithm"));
+        kafkaProperties.setProperty("ssl.truststore.location", configuration.getString("ssl.truststore.location"));
+        kafkaProperties.setProperty("ssl.truststore.password", configuration.getString("ssl.truststore.password"));
+        kafkaProperties.setProperty("ssl.keystore.type", configuration.getString("ssl.keystore.type"));
+        kafkaProperties.setProperty("ssl.keystore.location", configuration.getString("ssl.keystore.location"));
+        kafkaProperties.setProperty("ssl.keystore.password", configuration.getString("ssl.keystore.password"));
+        kafkaProperties.setProperty("ssl.key.password", configuration.getString("ssl.key.password"));
         LOGGER.info("Create producer with properties: {}", kafkaProperties);
         return new KafkaProducer<>(kafkaProperties, new UUIDSerializer(), new HostJsonSerializer());
     }

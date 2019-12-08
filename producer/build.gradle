@@ -18,6 +18,10 @@ application {
     mainClassName = 'os.statistics.producer.StatisticsProducerApplicationLauncher'
 }
 
+applicationDistribution.from('conf') {
+    into 'conf'
+}
+
 distributions {
     main {
         baseName = "producer"

@@ -20,14 +20,13 @@ public class StatisticsProducerApplicationLauncher {
         ApplicationHealthMBeanRegistrator.register(applicationHealth, StatisticsProducerApplicationHealthMBean.class);
         final var configuration = Utils.loadConfiguration("producer.conf");
         final var seconds = configuration.getDuration("os.collector.tick.duration", TimeUnit.SECONDS);
-        try {
-            OsStatisticsProvider
-                    .from(configuration)
-                    .withHealth(applicationHealth)
-                    .scheduleEach(seconds);
-        } finally {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             ApplicationHealthMBeanRegistrator.unregister(applicationHealth.getApplicationName());
-        }
+        }));
+        OsStatisticsProvider
+                .from(configuration)
+                .withHealth(applicationHealth)
+                .scheduleEach(seconds);
     }
 
 }

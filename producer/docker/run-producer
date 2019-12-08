@@ -1,11 +1,30 @@
 #!/bin/bash -x
+KEY_STORE_PWD=`openssl rand -base64 32`
+TRUST_STORE_PWD=`openssl rand -base64 32`
+echo "Import certificates into openssl"
+openssl pkcs12 -export -inkey /home/app/producer/conf/service.key -in /home/app/producer/conf/service.cert -out /home/app/producer/conf/client.keystore.p12 -name service_key -passout pass:${KEY_STORE_PWD}
+echo "Import certificates into keystore"
+keytool -noprompt -import -file /home/app/producer/conf/ca.pem -alias CA -keystore /home/app/producer/conf/client.truststore.jks -storepass ${TRUST_STORE_PWD}
+
 PRODUCER_CONFIG=producer.conf
-echo "os.collector.hostname=${PRODUCER_HOSTNAME}" >> ${PRODUCER_CONFIG}
-echo "os.collector.ipAddress=${PRODUCER_IP_ADDRESS}" >> ${PRODUCER_CONFIG}
-echo "os.collector.topicname=${KAFKA_TOPIC_NAME}" >> ${PRODUCER_CONFIG}
-echo "os.collector.tick.duration=${PRODUCER_TICK_DURATION}" >> ${PRODUCER_CONFIG}
-echo "bootstrap.servers=${KAFKA_BROKERS}" >> ${PRODUCER_CONFIG}
+echo "os.collector.hostname=\"${PRODUCER_HOSTNAME}\"" >> ${PRODUCER_CONFIG}
+echo "os.collector.ipAddress=\"${PRODUCER_IP_ADDRESS}\"" >> ${PRODUCER_CONFIG}
+echo "os.collector.topicname=\"${KAFKA_TOPIC_NAME}\"" >> ${PRODUCER_CONFIG}
+echo "os.collector.tick.duration=\"${PRODUCER_TICK_DURATION}\"" >> ${PRODUCER_CONFIG}
+echo "bootstrap.servers=\"${KAFKA_BROKERS}\"" >> ${PRODUCER_CONFIG}
+echo "ssl.truststore.password=\"${TRUST_STORE_PWD}\"">> ${PRODUCER_CONFIG}
+echo "ssl.keystore.password=\"${KEY_STORE_PWD}\"" >> ${PRODUCER_CONFIG}
+echo "ssl.key.password=\"${KEY_STORE_PWD}\"" >> ${PRODUCER_CONFIG}
 
 cat ${PRODUCER_CONFIG}
 
-exec /usr/app/producer/bin/producer
+rm -v /home/app/producer/conf/service.key
+rm -v /home/app/producer/conf/service.cert
+rm -v /home/app/producer/conf/ca.pem
+
+echo "Config file"
+ls -ll /home/app/producer
+echo "Generated key stores"
+ls -ll /home/app/producer/conf
+
+exec /home/app/producer/bin/producer
