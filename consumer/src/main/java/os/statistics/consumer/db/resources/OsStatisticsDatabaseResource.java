@@ -3,7 +3,7 @@ package os.statistics.consumer.db.resources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import os.statistics.commons.model.Host;
-import os.statistics.consumer.utils.Utils;
+import os.statistics.consumer.utils.DbUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -88,9 +88,9 @@ public class OsStatisticsDatabaseResource {
     }
 
     public void close() {
-        Utils.closeQuietly(hostHardwarePreparedStatement);
-        Utils.closeQuietly(hostFileSystemPreparedStatement);
-        Utils.closeQuietly(connection);
+        DbUtils.closeQuietly(hostHardwarePreparedStatement);
+        DbUtils.closeQuietly(hostFileSystemPreparedStatement);
+        DbUtils.closeQuietly(connection);
     }
 
 }
