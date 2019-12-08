@@ -18,11 +18,10 @@ public class StatisticsConsumerApplicationLauncher {
         databaseMigration(configuration);
         final var applicationHealth = new StatisticsConsumerApplicationHealth();
         ApplicationHealthMBeanRegistrator.register(applicationHealth, StatisticsConsumerApplicationHealthMBean.class);
-        try {
-            ConsumerProvider.from(configuration, applicationHealth);
-        } finally {
-            ApplicationHealthMBeanRegistrator.unregister(StatisticsConsumerApplicationHealth.APPLICATION_NAME);
-        }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            ApplicationHealthMBeanRegistrator.unregister(applicationHealth.getApplicationName());
+        }));
+        ConsumerProvider.from(configuration, applicationHealth);
     }
 
     private static void databaseMigration(Config configuration) {

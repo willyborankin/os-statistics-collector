@@ -1,0 +1,40 @@
+#!/bin/bash -x
+KEY_STORE_PWD=`openssl rand -base64 32`
+TRUST_STORE_PWD=`openssl rand -base64 32`
+
+echo "Import certificates into openssl"
+openssl pkcs12 -export -inkey /home/app/consumer/conf/service.key -in /home/app/consumer/conf/service.cert -out /home/app/consumer/conf/client.keystore.p12 -name service_key -passout pass:${KEY_STORE_PWD}
+echo "Import certificates into keystore"
+keytool -noprompt -import -file /home/app/consumer/conf/ca.pem -alias CA -keystore /home/app/consumer/conf/client.truststore.jks -storepass ${TRUST_STORE_PWD}
+
+CONSUMER_CONFIG=consumer.conf
+echo "jdbc.db.url=\"${CONSUMER_JDBC_URL}\"" >> ${CONSUMER_CONFIG}
+echo "jdbc.db.user=\"${CONSUMER_DB_APP_USER}\"" >> ${CONSUMER_CONFIG}
+echo "jdbc.db.password=\"${CONSUMER_DB_APP_PWD}\"" >> ${CONSUMER_CONFIG}
+
+echo "flyway.migration.locations=\"filesystem:${CONSUMER_DB_FLYWAY_LOCATIONS}\"" >> ${CONSUMER_CONFIG}
+echo "flyway.migration.user=\"${CONSUMER_DB_FLYWAY_USER}\"" >> ${CONSUMER_CONFIG}
+echo "flyway.migration.password=\"${CONSUMER_DB_FLYWAY_PWD}\"" >> ${CONSUMER_CONFIG}
+
+echo "consumer.poll=${CONSUMER_POLL}" >> ${CONSUMER_CONFIG}
+echo "consumer.topicname=\"${CONSUMER_TOPIC_NAME}\"" >> ${CONSUMER_CONFIG}
+echo "consumer.threads.amount=${CONSUMER_THREADS_AMOUNT}" >> ${CONSUMER_CONFIG}
+
+echo "bootstrap.servers=\"${KAFKA_BROKERS}\"" >> ${CONSUMER_CONFIG}
+
+echo "ssl.truststore.password=\"${TRUST_STORE_PWD}\"">> ${CONSUMER_CONFIG}
+echo "ssl.keystore.password=\"${KEY_STORE_PWD}\"" >> ${CONSUMER_CONFIG}
+echo "ssl.key.password=\"${KEY_STORE_PWD}\"" >> ${CONSUMER_CONFIG}
+
+cat ${CONSUMER_CONFIG}
+
+rm -v /home/app/consumer/conf/service.key
+rm -v /home/app/consumer/conf/service.cert
+rm -v /home/app/consumer/conf/ca.pem
+
+echo "Config file"
+ls -ll /home/app/consumer
+echo "Generated key stores"
+ls -ll /home/app/consumer/conf
+
+exec /home/app/consumer/bin/consumer

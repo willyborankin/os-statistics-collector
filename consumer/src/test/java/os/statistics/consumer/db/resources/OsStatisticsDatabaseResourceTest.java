@@ -11,6 +11,7 @@ import os.statistics.commons.model.Host;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -51,7 +52,7 @@ class OsStatisticsDatabaseResourceTest {
         new OsStatisticsDatabaseResource(mockedConnection)
                 .addStatistics(host);
 
-        verify(mockedHardwarePreparedStatement).setString(eq(1), any(String.class));
+        verify(mockedHardwarePreparedStatement).setObject(eq(1), any(UUID.class));
         verify(mockedHardwarePreparedStatement).setString(eq(2), eq(host.getHostname()));
         verify(mockedHardwarePreparedStatement).setString(eq(3), eq(host.getIpAddress()));
 
@@ -63,7 +64,7 @@ class OsStatisticsDatabaseResourceTest {
         verify(mockedHardwarePreparedStatement).setLong(eq(9), eq(hardware.getTotalSwapSpaceSize()));
 
 
-        verify(mockedFileSystemPreparedStatement).setString(eq(1), any(String.class));
+        verify(mockedFileSystemPreparedStatement).setObject(eq(1), any(UUID.class));
         verify(mockedFileSystemPreparedStatement).setString(eq(2), eq(host.getHostname()));
         verify(mockedFileSystemPreparedStatement).setString(eq(3), eq(host.getIpAddress()));
 

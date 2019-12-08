@@ -1,4 +1,8 @@
 CREATE SCHEMA IF NOT EXISTS os_statistics;
+
+GRANT ALL PRIVILEGES ON SCHEMA os_statistics TO flyway;
+GRANT ALL PRIVILEGES ON SCHEMA os_statistics TO application;
+
 SET search_path TO os_statistics;
 
 CREATE TABLE host_hardware (
@@ -26,3 +30,7 @@ CREATE TABLE host_file_system (
     created_at   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
 ) WITHOUT OIDS;
+
+GRANT ALL PRIVILEGES ON SCHEMA os_statistics TO application;
+GRANT ALL PRIVILEGES ON host_file_system TO application;
+GRANT ALL PRIVILEGES ON host_hardware TO application;

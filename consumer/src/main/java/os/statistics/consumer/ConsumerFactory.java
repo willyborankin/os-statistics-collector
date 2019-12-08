@@ -6,6 +6,8 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.UUIDDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import os.statistics.commons.model.Host;
 import os.statistics.model.serialization.HostJsonDeserializer;
 
@@ -14,6 +16,8 @@ import java.util.Properties;
 import java.util.UUID;
 
 public final class ConsumerFactory {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ConsumerFactory.class);
 
     public static Consumer<UUID, Host> createConsumer(Config configuration) {
         final var kafkaProperties = new Properties();
@@ -30,8 +34,18 @@ public final class ConsumerFactory {
         if (configuration.hasPath(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG))
             kafkaProperties.setProperty(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, configuration.getString(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG));
 
+        kafkaProperties.setProperty("security.protocol", configuration.getString("security.protocol"));
+        kafkaProperties.setProperty("ssl.endpoint.identification.algorithm", configuration.getString("ssl.endpoint.identification.algorithm"));
+        kafkaProperties.setProperty("ssl.truststore.location", configuration.getString("ssl.truststore.location"));
+        kafkaProperties.setProperty("ssl.truststore.password", configuration.getString("ssl.truststore.password"));
+        kafkaProperties.setProperty("ssl.keystore.type", configuration.getString("ssl.keystore.type"));
+        kafkaProperties.setProperty("ssl.keystore.location", configuration.getString("ssl.keystore.location"));
+        kafkaProperties.setProperty("ssl.keystore.password", configuration.getString("ssl.keystore.password"));
+        kafkaProperties.setProperty("ssl.key.password", configuration.getString("ssl.key.password"));
+
+        LOGGER.info("Create consumer with properties: {}", kafkaProperties);
         final var consumer = new KafkaConsumer<>(kafkaProperties, new UUIDDeserializer(), new HostJsonDeserializer());
-        consumer.subscribe(List.of(configuration.getString("consumer.topicName")));
+        consumer.subscribe(List.of(configuration.getString("consumer.topicname")));
         return consumer;
     }
 

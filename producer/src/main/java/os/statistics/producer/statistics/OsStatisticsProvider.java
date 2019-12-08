@@ -73,7 +73,6 @@ public class OsStatisticsProvider {
     }
 
     protected void collectHostInformationAndSendMessage() {
-        //send into the random partition
         try {
             statisticsProducer.send(
                     new ProducerRecord<>(
@@ -86,7 +85,6 @@ public class OsStatisticsProvider {
                             Utils.executeIfNotNull(applicationHealth, applicationHealth::incrementSuccessfulSent);
                         else if (isNonRepeatableException(e)) {
                             LOGGER.error("Couldn't send message: {}", recordMetadata);
-                            statisticsProducer.close();
                             Utils.executeIfNotNull(applicationHealth, applicationHealth::incrementFailedToSend);
                         }
                     }

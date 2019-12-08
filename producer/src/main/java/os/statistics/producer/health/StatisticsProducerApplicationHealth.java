@@ -32,7 +32,7 @@ public class StatisticsProducerApplicationHealth implements StatisticsProducerAp
     }
 
     public void incrementFailedToSend() {
-        successfulSent.incrementAndGet();
+        failedToSend.incrementAndGet();
     }
 
 

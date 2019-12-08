@@ -15,18 +15,18 @@ public class OsStatisticsDatabaseResource {
     private final static Logger LOGGER = LoggerFactory.getLogger(OsStatisticsDatabaseResource.class);
 
     public final static String HOST_HARDWARE_INSERT_SQL =
-            "INSERT INTO host_hardware(" +
+            "INSERT INTO os_statistics.host_hardware(" +
                     "id, host, ip_address, " +
                     "cpu_utilization, system_load_average, free_physical_memory_size, " +
                     "total_physical_memory_size, free_swap_space_size, total_swap_space_size) " +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "VALUES(?, ?, ?::inet, ?, ?, ?, ?, ?, ?)";
 
     public final static String HOST_FILE_SYSTEM_INSERT_SQL =
-            "INSERT INTO host_file_system(" +
+            "INSERT INTO os_statistics.host_file_system(" +
                     "id, host, ip_address, " +
                     "path, total_space, " +
                     "usable_space, free_space " +
-                    ") VALUES(?, ?, ?, ?, ?, ?, ?)";
+                    ") VALUES(?, ?, ?::inet, ?, ?, ?, ?)";
 
     private final Connection connection;
 
@@ -45,6 +45,7 @@ public class OsStatisticsDatabaseResource {
     }
 
     public void addStatistics(Host host) {
+        LOGGER.info("Add value: {}", host);
         try {
             insertHostHardwareStatistics(host);
             insertHostFileSystemStatistics(host);
@@ -63,7 +64,7 @@ public class OsStatisticsDatabaseResource {
     }
 
     private void insertHostHardwareStatistics(Host host) throws SQLException {
-        hostHardwarePreparedStatement.setString(1, UUID.randomUUID().toString());
+        hostHardwarePreparedStatement.setObject(1, UUID.randomUUID());
         hostHardwarePreparedStatement.setString(2, host.getHostname());
         hostHardwarePreparedStatement.setString(3, host.getIpAddress());
         final var hardware = host.getHardware();
@@ -77,7 +78,7 @@ public class OsStatisticsDatabaseResource {
 
     private void insertHostFileSystemStatistics(Host host) throws SQLException {
         for (final var fs : host.getFileSystem()) {
-            hostFileSystemPreparedStatement.setString(1, UUID.randomUUID().toString());
+            hostFileSystemPreparedStatement.setObject(1, UUID.randomUUID());
             hostFileSystemPreparedStatement.setString(2, host.getHostname());
             hostFileSystemPreparedStatement.setString(3, host.getIpAddress());
             hostFileSystemPreparedStatement.setString(4, fs.getPath());
