@@ -16,9 +16,17 @@ application {
             '-Dcom.sun.management.jmxremote.ssl=false'
     ]
 
-    mainClassName = 'io.aiven.consumer.StatisticsConsumerApplicationLauncher'
+    mainClassName = 'os.statistics.consumer.StatisticsConsumerApplicationLauncher'
 }
 
 applicationDistribution.from('conf') {
     into 'conf'
+}
+
+distributions {
+    main {
+        baseName = "consumer"
+        version = ""
+    }
+
 }
