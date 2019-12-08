@@ -1,0 +1,19 @@
+version: '3.3'
+
+services:
+  os-statistic-consumer:
+    build:
+      context: ./
+      dockerfile: ./consumer/docker/Dockerfile
+    ports:
+      - 9999:9999
+    restart: always
+    environment:
+      - KAFKA_BROKERS=kafka-246bca9e-andrey-1619.aivencloud.com:19355
+      - CONSUMER_JDBC_URL=jdbc:postgresql://pg-347c36e3-andrey-1619.aivencloud.com:19353/os-statistics
+      - CONSUMER_DB_APP_USER=application
+      - CONSUMER_DB_APP_PWD=
+      - CONSUMER_DB_FLYWAY_USER=flyway
+      - CONSUMER_DB_FLYWAY_PWD=
+
+

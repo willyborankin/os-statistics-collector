@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  os-statistic-producer:
+    build:
+      context: ./
+      dockerfile: ./producer/docker/Dockerfile
+    ports:
+      - 9998:9998
+    restart: always
+    environment:
+      - KAFKA_BROKERS=kafka-246bca9e-andrey-1619.aivencloud.com:19355
+      - PRODUCER_HOSTNAME=andrey-laptop
+      - PRODUCER_IP_ADDRESS=192.168.178.35
+      - KAFKA_TOPIC_NAME=osmetrics
+
+
