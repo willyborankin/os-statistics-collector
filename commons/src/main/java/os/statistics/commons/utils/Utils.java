@@ -36,7 +36,7 @@ public class Utils {
 
     public static void shutdownHukFor(ExecutorService executorService) {
         executeIfNotNull(executorService, () -> {
-            final var shudownHuk = (Runnable) () -> {
+            final var shutdownHuk = (Runnable) () -> {
                 executorService.shutdown();
                 try {
                     if (!executorService.awaitTermination(200, TimeUnit.MILLISECONDS)) {
@@ -47,7 +47,7 @@ public class Utils {
                     Thread.currentThread().interrupt();
                 }
             };
-            Runtime.getRuntime().addShutdownHook(new Thread(shudownHuk));
+            Runtime.getRuntime().addShutdownHook(new Thread(shutdownHuk));
         });
     }
 

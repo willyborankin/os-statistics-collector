@@ -16,7 +16,7 @@ public final class ProducerFactory {
 
     public static Producer<UUID, Host> createProducer(Config configuration) {
         final var kafkaProperties = new Properties();
-        kafkaProperties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, configuration.getString("bootstrap.servers"));
+        kafkaProperties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, configuration.getString(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG));
         kafkaProperties.setProperty(ProducerConfig.CLIENT_ID_CONFIG, String.format("%s-%s", StatisticsProducerApplicationHealth.APPLICATION_NAME, UUID.randomUUID().toString()));
         if (configuration.hasPath(ProducerConfig.BUFFER_MEMORY_CONFIG))
             kafkaProperties.setProperty(ProducerConfig.BUFFER_MEMORY_CONFIG, configuration.getString(ProducerConfig.BUFFER_MEMORY_CONFIG));
