@@ -61,6 +61,7 @@ if you want to use another name please see the full list of environment variable
     Full list of environment variables can be found in the `consumer/docker/Dockerfile` file
 
 4. run `docker-compose -f run-consumer-run.yml up --build`
+5. Consumer application automaticaly expose the JMX port 9999. You can connect to the consumer machine using `jconsole` and find bean with name `os.statistics.commons.health:type=APPLICATION-OS-STATISTICS-CONSUMER` 
 
 ### How to run Kafka producer
 To run kafka producer you need:
@@ -77,3 +78,5 @@ if you want to use another name please see the full list of environment variable
     Full list of environment variables can be found in the `producer/docker/Dockerfile` file
 
 3. run `docker-compose -f run-producer-run.yml up --build`
+4. Producer application automaticaly expose the JMX port 9998. You can connect to the consumer machine using `jconsole` and find bean with name `os.statistics.commons.health:type=APPLICATION-OS-STATISTICS-PRODUCER` 
+
