@@ -11,13 +11,13 @@ It takes operation system metrics and puts them into PostgreSQL database
 
 ### How to build
 Before building the project make sure that you have installed:
-- JDK version >= 11
-- Docker version >= 19.03.5-ce
-- Docker Compose version >= 1.25.x
+- `JDK` version >= 11
+- `Docker` version >= 19.03.5-ce
+- `Docker Compose` version >= 1.25.x
 
 and have access or have installed:
-- PostgreSQL database
-- Kafka service version >= 2.3
+- `PostgreSQL` database
+- `Kafka server` version >= 2.3
 
 To build the project run `./gradlew clean build` command
 
