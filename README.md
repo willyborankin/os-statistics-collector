@@ -3,6 +3,13 @@
 This project is just small example of using Kafka producer/consumer.
 It takes operation system metrics and puts them into PostgreSQL database 
 
+### Project structure
+- `config` - configuration folder for the SSL certificates 
+- `commons` - contains common code and model for the consumer and producer
+- `consumer` - consumer implementation
+- `producer` - producer implementation
+
+### How to build
 Before building the project make sure that you have installed:
 - JDK version >= 11
 - Docker version >= 19.03.5-ce
@@ -12,9 +19,7 @@ and have access or have installed:
 - PostgreSQL database
 - Kafka service version >= 2.3
 
-### How to build
-You will need gradle for building `os-statistics-collector`
-- To build run `./gradlew clean build` this will build the project
+To build the project run `./gradlew clean build` command
 
 *Before you run consumer and producer, you should prepare you SSL certificates*
 
@@ -64,18 +69,11 @@ To run kafka producer you need:
 if you want to use another name please see the full list of environment variables the `producer/docker/Dockerfile` file
 
 2. Change environment variables in `run-consumer-run.yml`
-    - KAFKA_BROKERS - comma-separated list of Kafka brokers
-    - PRODUCER_HOSTNAME - producer host name
-    - PRODUCER_IP_ADDRESS - producer IP address
-    - KAFKA_TOPIC_NAME - Kafka topic name
+    - `KAFKA_BROKERS` - comma-separated list of Kafka brokers
+    - `PRODUCER_HOSTNAME` - producer host name
+    - `PRODUCER_IP_ADDRESS` - producer IP address
+    - `KAFKA_TOPIC_NAME` - Kafka topic name
 
     Full list of environment variables can be found in the `producer/docker/Dockerfile` file
 
 3. run `docker-compose -f run-producer-run.yml up --build`
-
-### Project structure
-- `config` - configuration folder for the SSL certificates 
-- `commons` - contains common code and model for the consumer and producer
-- `consumer` - consumer implementation
-- `producer` - producer implementation
-
