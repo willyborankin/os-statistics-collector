@@ -24,9 +24,9 @@ To build the project run `./gradlew clean build` command
 *Before you run consumer and producer, you should prepare you SSL certificates*
 
 Download your:
-- Access Key - expected file name is: `service.key`
-- Access Certificate - expected file name is: `service.cert`
-- CA Certificate - expected file name is: `ca.pem`
+- `Access Key` - expected file name is: `service.key`
+- `Access Certificate` - expected file name is: `service.cert`
+- `CA Certificate` - expected file name is: `ca.pem`
 
 and put them into `config` folder
 
