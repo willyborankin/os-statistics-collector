@@ -1,7 +1,7 @@
 # Operation system statistics collector
 
 This project is just small example of using Kafka producer/consumer.
-It takes operation system metrics using and puts them into PostgreSQL database 
+It takes operation system metrics and puts them into PostgreSQL database 
 
 Before building the project make sure that you have installed:
 - JDK version >= 11
